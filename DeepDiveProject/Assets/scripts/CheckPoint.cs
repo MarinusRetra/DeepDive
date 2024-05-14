@@ -9,10 +9,6 @@ public class CheckPoint : MonoBehaviour
     {
         GM = GameObject.Find("GameMaster").GetComponent<GameMaster>();
     }
-    void Update()
-    {
-        
-    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player")
