@@ -1,7 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Microsoft.Unity.VisualStudio.Editor;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+using Image = UnityEngine.UI.Image;
 using Random = System.Random;
 
 public enum GearState {
@@ -13,10 +17,11 @@ public enum GearState {
 
 public class CarController : MonoBehaviour {
     private float horizontalInput, verticalInput;
-    private float currentSteerAngle, currentbreakForce;
+    private float currentSteerAngle;
     private bool isBreaking;
 
     // Settings
+    [Header("Settings")]
     [SerializeField] public int isEngineRunning;
 
     [SerializeField] private float maxSteerAngle;
@@ -39,12 +44,28 @@ public class CarController : MonoBehaviour {
     [SerializeField] private float changeGearTime = 0.5f;
 
     // Wheel Colliders
+    [Header("Wheel Colliders")]
     [SerializeField] private WheelCollider frontLeftWheelCollider, frontRightWheelCollider;
     [SerializeField] private WheelCollider rearLeftWheelCollider, rearRightWheelCollider;
 
     // Wheels
+    [Header("Wheels")]
     [SerializeField] private Transform frontLeftWheelTransform, frontRightWheelTransform;
     [SerializeField] private Transform rearLeftWheelTransform, rearRightWheelTransform;
+
+    // UI
+    [Header("UI")]
+    [SerializeField] private GameObject RPMBar;
+    [SerializeField] private Slider RPMSlider;
+    [SerializeField] private TMP_Text SpeedIndicator;
+    [SerializeField] private TMP_Text GearIndicator;
+
+    // Car State
+
+
+    private void Update() {
+        UpdateUIElements();
+    }
 
     private void FixedUpdate() {
         GetInput();
@@ -134,10 +155,10 @@ public class CarController : MonoBehaviour {
     }
 
     private void ApplyBreaking() {
-        frontRightWheelCollider.brakeTorque = currentbreakForce;
-        frontLeftWheelCollider.brakeTorque = currentbreakForce;
-        rearLeftWheelCollider.brakeTorque = currentbreakForce;
-        rearRightWheelCollider.brakeTorque = currentbreakForce;
+        frontRightWheelCollider.brakeTorque = isBreaking ? brakePower: 0f;
+        frontLeftWheelCollider.brakeTorque = isBreaking ? brakePower : 0f;
+        rearLeftWheelCollider.brakeTorque = isBreaking ? brakePower : 0f;
+        rearRightWheelCollider.brakeTorque = isBreaking ? brakePower : 0f;
     }
 
     private void HandleSteering() {
@@ -151,6 +172,16 @@ public class CarController : MonoBehaviour {
         UpdateSingleWheel(frontRightWheelCollider, frontRightWheelTransform);
         UpdateSingleWheel(rearRightWheelCollider, rearRightWheelTransform);
         UpdateSingleWheel(rearLeftWheelCollider, rearLeftWheelTransform);
+    }
+
+    private void UpdateUIElements() {
+        RPMSlider.value = RPM;
+
+        if (RPM / redLine > .95) {
+            RPMBar.GetComponent<Image>().color = Color.red;
+        } else RPMBar.GetComponent<Image>().color = Color.white;
+
+        GearIndicator.text = $"Gear: {currentGear}";
     }
 
     private void UpdateSingleWheel(WheelCollider wheelCollider, Transform wheelTransform) {
