@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor.SceneManagement;
 
 public class ButtonFunctions : MonoBehaviour
 {
@@ -14,5 +15,13 @@ public class ButtonFunctions : MonoBehaviour
     void Update()
     {
         
+    }
+    public void Play()
+    {
+        EditorSceneManager.LoadScene(1);
+    }
+    public void Quit()
+    {
+        Application.Quit();
     }
 }
