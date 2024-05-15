@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class RaceStart : MonoBehaviour
 {
+    public bool RaceStarted = false;
+
     void Start()
     {
         StartCoroutine(nameof(OnRaceStart));
@@ -19,6 +21,10 @@ public class RaceStart : MonoBehaviour
       }
 
       yield return new WaitForSeconds(Random.Range(0.1f, 3.01f));
+      RaceStarted = true;
+
+       
+
 
       for (int i = 0; i < gameObject.transform.childCount; i++)
       {
