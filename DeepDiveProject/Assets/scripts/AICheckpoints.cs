@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Checkpoints : MonoBehaviour
+public class AICheckpoints : MonoBehaviour
 {
     public Vector3 WallSize = new Vector3(1, 1, 1);
 
