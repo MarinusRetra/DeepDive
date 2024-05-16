@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class RaceStart : MonoBehaviour
 {
-    public bool RaceStarted = false;
+    public static bool RaceStarted = false;
+    public GameObject Holder;
 
     void Start()
     {
@@ -22,6 +23,7 @@ public class RaceStart : MonoBehaviour
 
       yield return new WaitForSeconds(Random.Range(0.1f, 3.01f));
       RaceStarted = true;
+      Holder.SetActive(false);
 
        
 

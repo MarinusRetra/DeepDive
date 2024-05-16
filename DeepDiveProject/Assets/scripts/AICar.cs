@@ -12,10 +12,11 @@ public class AICar : MonoBehaviour
     }
     #endregion
 
-    public float MoveSpeed = 1.0f;
+    public float MoveSpeed = 0f;
     public float TurnSpeed = 0.1f;
     private Rigidbody rb = null;
     private structAI ai;
+
 
     private void Start()
     {
@@ -26,13 +27,16 @@ public class AICar : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        //turn
-        ai.directionSteer = ai.checkpoints.GetChild(ai.idx).position - this.transform.position;
-        ai.rotationSteer = Quaternion.LookRotation(ai.directionSteer);
-        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, ai.rotationSteer, TurnSpeed);
+        if (RaceStart.RaceStarted == true)
+        {
+            //turn
+            ai.directionSteer = ai.checkpoints.GetChild(ai.idx).position - this.transform.position;
+            ai.rotationSteer = Quaternion.LookRotation(ai.directionSteer);
+            this.transform.rotation = Quaternion.Lerp(this.transform.rotation, ai.rotationSteer, TurnSpeed);
 
-        //move
-        rb.AddRelativeForce(Vector3.forward * MoveSpeed, ForceMode.VelocityChange);
+            //move
+            rb.AddRelativeForce(Vector3.forward * MoveSpeed, ForceMode.VelocityChange);
+        }
     }
     private void OnTriggerEnter(Collider other)
     {
