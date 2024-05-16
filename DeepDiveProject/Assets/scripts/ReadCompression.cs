@@ -1,15 +1,13 @@
-using System.Collections;
 using UnityEngine;
-using System;
-
 public class ReadCompression : MonoBehaviour
 {
-    [SerializeField] public float[] currentCompressions = new float[4];
+    /// <summary>
+    /// In deze array kun je de compression uitlezen van alle wielen met Compressionsp[element].CompressionValue
+    /// </summary>
+    public Compression[] Compressions = new Compression[4]{ new(0,"Wiel1") ,new(0, "Wiel2"), new(0, "Wiel3"), new(0, "Wiel4") }; // initialize de dingen in de array
     private readonly WheelCollider[] WheelColliders = new WheelCollider[4];
 
     GameObject WheelCollidersObject;
-
-
     
     bool FoundCar = false;
 
@@ -29,24 +27,17 @@ public class ReadCompression : MonoBehaviour
             
     private void Update()
     {
-        //Gaat door alle wheelcolliders heen en geeft je de huidige compression terug per wiel
-
+        //Gaat door alle wheelcolliders heen en geeft je de huidige compressie van alle wielen
         if (FoundCar)
         {
-            for (int i = 0; i <  WheelCollidersObject.transform.childCount; i++) 
+            for (int i = 0; i < WheelCollidersObject.transform.childCount; i++) 
             {
                 if (WheelColliders[i].GetGroundHit(out WheelHit hit))   
                 {
-                    currentCompressions[i] = 1 - hit.point.y / WheelColliders[i].suspensionDistance;
-                    Debug.Log($"{WheelColliders[i].name} Compression: {currentCompressions[i]}" );
+                    Compressions[i].SetCompression(Mathf.Clamp01(1 - hit.point.y / WheelColliders[i].suspensionDistance));
                 }
             }
         }
-    }
-
-    IEnumerator CompareLastCompression(float suspensionIn)
-    {
-        yield return new WaitForEndOfFrame();
     }
 
     public bool FindCar()
@@ -54,17 +45,12 @@ public class ReadCompression : MonoBehaviour
         if (GameObject.FindGameObjectsWithTag("Player") != null)
         {
             FoundCar = true;
-
-            Debug.Log(FoundCar);
             return FoundCar;
         }
         else
         { 
             FoundCar = false;
-
-            Debug.Log(FoundCar);
             return FoundCar;
-
         }
 
 
