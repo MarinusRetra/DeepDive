@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Monza Circuit.unity
     guid: 37f7de22dea82ec48b3f7d539dc6ec86
   - enabled: 1
+    path: Assets/Scenes/SilverStone_Circuit.unity
+    guid: 4110fade7d9a67442b6f66f4ebd4e2a5
+  - enabled: 1
     path: Assets/Scenes/Dev_TestMap.unity
     guid: 23c446de37552fd4188dc212df14cc50
   m_configObjects: {}
