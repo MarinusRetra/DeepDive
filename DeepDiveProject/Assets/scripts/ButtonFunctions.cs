@@ -1,22 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
 
 public class ButtonFunctions : MonoBehaviour
 {
     public GameObject mainmenupanel;
     public GameObject levelselectpanel;
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     public void Play()
     {
        mainmenupanel.SetActive(false);
@@ -28,16 +18,17 @@ public class ButtonFunctions : MonoBehaviour
     }
     public void LevelSelect1()
     {
-        EditorSceneManager.LoadScene(1);
+        SceneManager.LoadScene(1);
 
     }
     public void LevelSelect2()
     {
 
-        EditorSceneManager.LoadScene(2);
+        SceneManager.LoadScene(2);
     }
     public void MainMenu()
     {
-        EditorSceneManager.LoadScene(0);
+        Time.timeScale = 1;
+        SceneManager.LoadScene(0);
     }
 }
