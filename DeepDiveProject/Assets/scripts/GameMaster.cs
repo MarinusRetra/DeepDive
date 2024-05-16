@@ -10,18 +10,19 @@ public class GameMaster : MonoBehaviour
     public void Check()
     {
         curentCheck++;
-    }
-    public void Finish()
-    {
         if (curentCheck == CheckPoints.Count)
         {
             timer.Finish();
             curentCheck = 0;
-            GetComponent<timer>().Finish();
-            foreach (GameObject go in CheckPoints) 
-            {
-                go.SetActive(true);
-            }
+            ////GetComponent<timer>().Finish();
+            //foreach (GameObject go in CheckPoints)
+            //{
+            //    go.SetActive(true);
+            //}
         }
+    }
+    public void Finish()
+    {
+        
     }
 }
