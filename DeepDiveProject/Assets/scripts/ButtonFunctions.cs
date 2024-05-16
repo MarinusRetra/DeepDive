@@ -5,7 +5,8 @@ using UnityEditor.SceneManagement;
 
 public class ButtonFunctions : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public GameObject mainmenupanel;
+    public GameObject levelselectpanel;
     void Start()
     {
         
@@ -18,7 +19,8 @@ public class ButtonFunctions : MonoBehaviour
     }
     public void Play()
     {
-        EditorSceneManager.LoadScene(1);
+       mainmenupanel.SetActive(false);
+       levelselectpanel.SetActive(true);
     }
     public void Quit()
     {
@@ -32,6 +34,10 @@ public class ButtonFunctions : MonoBehaviour
     public void LevelSelect2()
     {
 
-        EditorSceneManager.LoadScene(1);
+        EditorSceneManager.LoadScene(2);
+    }
+    public void MainMenu()
+    {
+        EditorSceneManager.LoadScene(0);
     }
 }
