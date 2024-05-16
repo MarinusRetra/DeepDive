@@ -4,8 +4,8 @@ public class ReadCompression : MonoBehaviour
     /// <summary>
     /// In deze array kun je de compression uitlezen van alle wielen met Compressionsp[element].CompressionValue
     /// </summary>
-    public Compression[] Compressions = new Compression[4]{ new(0,"Wiel1") ,new(0, "Wiel2"), new(0, "Wiel3"), new(0, "Wiel4") }; // initialize de dingen in de array
     private readonly WheelCollider[] WheelColliders = new WheelCollider[4];
+    public Compression[] Compressions = new Compression[4]{ new(0, "Wiel1") ,new(0, "Wiel2"), new(0, "Wiel3"), new(0, "Wiel4") }; // initialize de dingen in de array
 
     GameObject WheelCollidersObject;
     
@@ -21,6 +21,7 @@ public class ReadCompression : MonoBehaviour
             for (int i = 0; i < WheelColliders.Length; i++)
             {
                 WheelColliders[i] = WheelCollidersObject.transform.GetChild(i).GetComponent<WheelCollider>();
+                Compressions[i].SetName(WheelColliders[i].name);
             }
         }
     }

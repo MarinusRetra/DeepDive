@@ -17,4 +17,8 @@ public class Compression
     { 
       CompressionValue = compressionIn;
     }
+    public void SetName(string nameIn)
+    { 
+       WheelName = nameIn;
+    }
 }
