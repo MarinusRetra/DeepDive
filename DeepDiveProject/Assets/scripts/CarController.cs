@@ -83,6 +83,8 @@ public class CarController : MonoBehaviour {
     float GearUp() => playerInput.actions["GearUp"].ReadValue<float>();
     float GearDown() => playerInput.actions["GearDown"].ReadValue<float>();
     float GetClutch() => playerInput.actions["Clutch"].ReadValue<float>();
+    float GetLookRight() => playerInput.actions["CameraRight"].ReadValue<float>();
+    float GetLookLeft() => playerInput.actions["CameraLeft"].ReadValue<float>();
 
     private void Update() {
         UpdateUIElements();
@@ -94,6 +96,15 @@ public class CarController : MonoBehaviour {
         HandleSteering();
         UpdateWheels();
         clutch = 1 - GetClutch();
+        if (GetLookRight() > 0)
+            CineCamera.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset =
+                new Vector3(0.1f, 0, -0.24f);
+        else if (GetLookLeft() > 0)
+            CineCamera.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset =
+                new Vector3(-0.1f, 0, -0.24f);
+        else 
+            CineCamera.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset =
+            new Vector3(0f, 0, -0.24f);
     }
 
     private void GetInput() {

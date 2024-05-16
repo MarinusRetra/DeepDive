@@ -1,5 +1,5 @@
 {
-    "name": "testinputs",
+    "name": "Controller",
     "maps": [
         {
             "name": "Player",
@@ -829,6 +829,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "CameraLeft",
+                    "type": "Button",
+                    "id": "abdedd26-520c-4f80-b597-cbb09d23b05d",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "CameraRight",
+                    "type": "Button",
+                    "id": "b3192912-7199-4fdd-b4fa-dbebf9d5be5a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -895,6 +913,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "GearDown",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ca04d886-d051-4d53-9b0c-940092fa73f7",
+                    "path": "<Gamepad>/dpad/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CameraLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b533c691-a787-47ad-8df7-e4c0109f0189",
+                    "path": "<Gamepad>/dpad/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CameraRight",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
