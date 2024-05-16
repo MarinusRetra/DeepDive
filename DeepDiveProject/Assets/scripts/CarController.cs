@@ -69,13 +69,16 @@ public class CarController : MonoBehaviour {
 
    // UI
    [Header("UI")]
-    [SerializeField] private GameObject RPMBar;
-    [SerializeField] private Slider RPMSlider;
-    [SerializeField] private TMP_Text SpeedIndicator;
-    [SerializeField] private TMP_Text GearIndicator;
+   [SerializeField] private GameObject RPMBar;
+   [SerializeField] private Slider RPMSlider;
+   [SerializeField] private TMP_Text SpeedIndicator;
+   [SerializeField] private TMP_Text GearIndicator;
 
     // Car State
 
+    float Lerp(float a, float b, float t) {
+        return a * (1 - t) + b * t;
+    }
 
     // Inputs
     float GetForward() => playerInput.actions["Accelerate"].ReadValue<float>();
@@ -95,16 +98,18 @@ public class CarController : MonoBehaviour {
         HandleMotor();
         HandleSteering();
         UpdateWheels();
+
         clutch = 1 - GetClutch();
+
         if (GetLookRight() > 0)
             CineCamera.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset =
-                new Vector3(0.1f, 0, -0.24f);
+                new Vector3(Lerp(CineCamera.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset.x, -0.2f, .1f), 0, -0.24f);
         else if (GetLookLeft() > 0)
             CineCamera.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset =
-                new Vector3(-0.1f, 0, -0.24f);
+                new Vector3(Lerp(CineCamera.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset.x, 0.2f, .1f), 0, -0.24f);
         else 
             CineCamera.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset =
-            new Vector3(0f, 0, -0.24f);
+                new Vector3(Lerp(CineCamera.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset.x, 0, .1f), 0, -0.24f);
     }
 
     private void GetInput() {
@@ -206,7 +211,7 @@ public class CarController : MonoBehaviour {
     }
 
     private void HandleSteering() {
-        currentSteerAngle = maxSteerAngle * horizontalInput;
+        currentSteerAngle = Lerp(currentSteerAngle, maxSteerAngle * horizontalInput, .055f);
 
         SteeringWheel.transform.localRotation = Quaternion.Euler(new Vector3(-15.957f, -180,
             (currentSteerAngle / maxSteerAngle * 360)));
@@ -223,9 +228,9 @@ public class CarController : MonoBehaviour {
     }
 
     private void UpdateUIElements() {
-        RPMSlider.value = RPM;
+        RPMSlider.value = Math.Clamp(RPM, 0, redLine);
 
-        if (RPM / redLine > .95) {
+        if (RPM / redLine > .99) {
             RPMBar.GetComponent<Image>().color = Color.red;
         } else RPMBar.GetComponent<Image>().color = Color.white;
 
