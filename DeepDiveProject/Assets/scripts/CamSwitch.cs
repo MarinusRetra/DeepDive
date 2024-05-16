@@ -8,6 +8,14 @@ public class CamSwitch : MonoBehaviour
     public GameObject cam1;
     public GameObject cam2;
     public GameObject cam3;
+    void Update()
+    {
+       if (Input.GetKeyDown(KeyCode.Alpha1))
+       {
+           Switch();
+       }
+    }
+
     public void Switch()
     {
         if(cam == 2)
@@ -36,5 +44,6 @@ public class CamSwitch : MonoBehaviour
                 cam1.SetActive(false);
                 break;
         }
+
     }
 }

@@ -1,19 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class InGameMenu : MonoBehaviour
 {
-
     public GameObject settingsPanel;
-    void Start()
-    {
-        
-    }
 
-    void Update()
+
+    private void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Menu();
+        }
     }
     public void Menu()
     {
