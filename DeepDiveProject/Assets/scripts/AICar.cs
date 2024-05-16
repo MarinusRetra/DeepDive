@@ -14,6 +14,7 @@ public class AICar : MonoBehaviour
 
     public float MoveSpeed = 0f;
     public float TurnSpeed = 0.1f;
+    [SerializeField] int FinishTimes = 0;
     private Rigidbody rb = null;
     private structAI ai;
 
@@ -43,6 +44,14 @@ public class AICar : MonoBehaviour
         if (other.CompareTag("Wall") == true)
         {
             ai.idx = CalcNextCheckpoint();
+        }
+        if (other.CompareTag("Finish"))
+        { 
+            FinishTimes++;
+        }
+        if (FinishTimes > 2)
+        {
+            Debug.Log("AI won");
         }
     }
     private int CalcNextCheckpoint()
