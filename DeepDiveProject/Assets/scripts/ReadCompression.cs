@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 public class ReadCompression : MonoBehaviour
 {
@@ -35,7 +36,7 @@ public class ReadCompression : MonoBehaviour
             {
                 if (WheelColliders[i].GetGroundHit(out WheelHit hit))   
                 {
-                    Compressions[i].SetCompression(Mathf.Clamp01(1 - hit.point.y / WheelColliders[i].suspensionDistance));
+                    Compressions[i].SetCompression(Mathf.Clamp01(Math.Abs(1 - hit.point.y / WheelColliders[i].suspensionDistance)));
                 }
             }
         }
