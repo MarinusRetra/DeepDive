@@ -11,9 +11,14 @@ public class timer : MonoBehaviour
     public static bool counting = false;
     public float tTime;
     public float tTimeScore = 0;
+
+    private void Start()
+    {
+        counting = false;
+    }
     void Update() 
     {
-        if (counting)
+        if (counting == true)
         { 
             tTime += Time.deltaTime; 
             Timer.text = tTime.ToString("00.00");

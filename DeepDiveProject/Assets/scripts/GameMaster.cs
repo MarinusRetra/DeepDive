@@ -5,10 +5,9 @@ using UnityEngine;
 
 public class GameMaster : MonoBehaviour
 {
-    public GameObject FinishText;
+    public TextMeshProUGUI FinishText;
     public timer timer;
     public int curentCheck;
-    [SerializeField] int FinishedPlayer = 0;
 
     public List<GameObject> CheckPoints;
     public void Check()
@@ -16,8 +15,7 @@ public class GameMaster : MonoBehaviour
         curentCheck++;
         if (curentCheck == CheckPoints.Count)
         {
-            timer.Finish();
-            curentCheck = 0;
+            Finish();
             ////GetComponent<timer>().Finish();
             //foreach (GameObject go in CheckPoints)
             //{
@@ -27,12 +25,9 @@ public class GameMaster : MonoBehaviour
     }
     public void Finish()
     {
-        FinishedPlayer++;
-        if (FinishedPlayer > 0)
-        {
-            timer.counting = false;
-            gameObject.GetComponent<InGameMenu>().Menu();
-            FinishText.GetComponent<TextMeshProUGUI>().text = $"You finished in {timer.tTime}";
-        }
+        curentCheck = 0;
+        timer.counting = false;
+        gameObject.GetComponent<InGameMenu>().Menu();
+        FinishText.text = $"You finished in {timer.tTime}";
     }
 }

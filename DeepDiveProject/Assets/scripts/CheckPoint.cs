@@ -14,7 +14,7 @@ public class CheckPoint : MonoBehaviour
         if (other.tag == "Player")
         {
             GM.Check();
-            //gameObject.SetActive(false);
+            gameObject.SetActive(false);
         }
     }
 }
