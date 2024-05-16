@@ -53,6 +53,42 @@ public class AICar : MonoBehaviour
         {
             Debug.Log("AI won");
         }
+
+        if (other.CompareTag("0.2") == true)
+        {
+            MoveSpeed = 0.2f;
+            ai.idx = CalcNextCheckpoint();
+        }
+        if (other.CompareTag("0.3") == true)
+        {
+            MoveSpeed = 0.3f;
+            ai.idx = CalcNextCheckpoint();
+        }
+        if (other.CompareTag("0.4") == true)
+        {
+            MoveSpeed = 0.4f;
+            ai.idx = CalcNextCheckpoint();
+        }
+        if (other.CompareTag("0.5") == true)
+        {
+            MoveSpeed = 0.5f;
+            ai.idx = CalcNextCheckpoint();
+        }
+        if (other.CompareTag("0.7") == true)
+        {
+            MoveSpeed = 0.7f;
+            ai.idx = CalcNextCheckpoint();
+        }
+        if (other.CompareTag("0.9") == true)
+        {
+            MoveSpeed = 0.9f;
+            ai.idx = CalcNextCheckpoint();
+        }
+        if (other.CompareTag("1.0") == true)
+        {
+            MoveSpeed = 1.0f;
+            ai.idx = CalcNextCheckpoint();
+        }
     }
     private int CalcNextCheckpoint()
     {

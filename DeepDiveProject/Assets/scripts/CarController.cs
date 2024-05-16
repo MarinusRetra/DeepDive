@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using Microsoft.Unity.VisualStudio.Editor;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using Image = UnityEngine.UI.Image;
 using Random = System.Random;
@@ -37,24 +39,36 @@ public class CarController : MonoBehaviour {
     [SerializeField] private float brakePower;
     [SerializeField] private float differentialRatio;
     [SerializeField] private AnimationCurve hpToRPMCurve;
-    Random random = new Random();
+    [SerializeField] private CinemachineVirtualCamera CineCamera;
+    [SerializeField] private PlayerInput playerInput;
+    [SerializeField] private bool ControllerEnabled;
 
     [SerializeField] private float increaseGearRPM;
     [SerializeField] private float decreaseGearRPM;
     [SerializeField] private float changeGearTime = 0.5f;
 
+    Random random = new Random();
+
+    [Header("Effects")]
+    [SerializeField] private GameObject SteeringWheel;
+    [SerializeField] private Rigidbody VehicleRigidBody;
+
     // Wheel Colliders
     [Header("Wheel Colliders")]
-    [SerializeField] private WheelCollider frontLeftWheelCollider, frontRightWheelCollider;
-    [SerializeField] private WheelCollider rearLeftWheelCollider, rearRightWheelCollider;
+    [SerializeField] private WheelCollider frontLeftWheelCollider;
+    [SerializeField] private WheelCollider frontRightWheelCollider;
+    [SerializeField] private WheelCollider rearLeftWheelCollider;
+    [SerializeField] private WheelCollider rearRightWheelCollider;
 
     // Wheels
     [Header("Wheels")]
-    [SerializeField] private Transform frontLeftWheelTransform, frontRightWheelTransform;
-    [SerializeField] private Transform rearLeftWheelTransform, rearRightWheelTransform;
+    [SerializeField] private Transform frontLeftWheelTransform;
+    [SerializeField] private Transform frontRightWheelTransform;
+    [SerializeField] private Transform rearLeftWheelTransform;
+    [SerializeField] private Transform rearRightWheelTransform;
 
-    // UI
-    [Header("UI")]
+   // UI
+   [Header("UI")]
     [SerializeField] private GameObject RPMBar;
     [SerializeField] private Slider RPMSlider;
     [SerializeField] private TMP_Text SpeedIndicator;
@@ -62,6 +76,15 @@ public class CarController : MonoBehaviour {
 
     // Car State
 
+
+    // Inputs
+    float GetForward() => playerInput.actions["Accelerate"].ReadValue<float>();
+    float GetBrake() => playerInput.actions["Brake"].ReadValue<float>();
+    float GearUp() => playerInput.actions["GearUp"].ReadValue<float>();
+    float GearDown() => playerInput.actions["GearDown"].ReadValue<float>();
+    float GetClutch() => playerInput.actions["Clutch"].ReadValue<float>();
+    float GetLookRight() => playerInput.actions["CameraRight"].ReadValue<float>();
+    float GetLookLeft() => playerInput.actions["CameraLeft"].ReadValue<float>();
 
     private void Update() {
         UpdateUIElements();
@@ -72,6 +95,16 @@ public class CarController : MonoBehaviour {
         HandleMotor();
         HandleSteering();
         UpdateWheels();
+        clutch = 1 - GetClutch();
+        if (GetLookRight() > 0)
+            CineCamera.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset =
+                new Vector3(0.1f, 0, -0.24f);
+        else if (GetLookLeft() > 0)
+            CineCamera.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset =
+                new Vector3(-0.1f, 0, -0.24f);
+        else 
+            CineCamera.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset =
+            new Vector3(0f, 0, -0.24f);
     }
 
     private void GetInput() {
@@ -79,21 +112,24 @@ public class CarController : MonoBehaviour {
         horizontalInput = Input.GetAxis("Horizontal");
 
         // Acceleration Input
-        verticalInput = Input.GetAxis("Vertical");
-
+        if (ControllerEnabled) {
+            verticalInput = GetForward();
+        } else {
+            verticalInput = Input.GetAxis("Vertical");
+        }
     }
 
     float CalculateTorque(float gasInput) {
         float torque = 0;
-        if (RPM < idleRPM + 200 && gasInput == 0 && currentGear == 0) {
-            gearState = GearState.Neutral;
-        }
+        //if (RPM < idleRPM + 200 && gasInput == 0 && currentGear == 0) {
+        //    gearState = GearState.Neutral;
+        //}
 
         if (gearState == GearState.Running && clutch > 0) {
-            if (RPM > increaseGearRPM) { // Get Key E
+            if (Input.GetKey(KeyCode.E) || GearUp() == 1) { // Get Key E | RPM > increaseGearRPM
                 StartCoroutine(ChangeGear(1));
             }
-            else if (RPM < decreaseGearRPM) { // GetKey Q
+            else if (Input.GetKey(KeyCode.Q) || GearDown() == 1) { // GetKey Q | RPM < decreaseGearRPM
                 StartCoroutine(ChangeGear(-1));
             }
         }
@@ -140,7 +176,7 @@ public class CarController : MonoBehaviour {
     }
 
     private void HandleMotor() {
-        if (verticalInput < 0) {
+        if (verticalInput < 0 || GetBrake() > 0) {
             verticalInput = 0;
             isBreaking = true;
         }
@@ -155,14 +191,26 @@ public class CarController : MonoBehaviour {
     }
 
     private void ApplyBreaking() {
-        frontRightWheelCollider.brakeTorque = isBreaking ? brakePower: 0f;
-        frontLeftWheelCollider.brakeTorque = isBreaking ? brakePower : 0f;
-        rearLeftWheelCollider.brakeTorque = isBreaking ? brakePower : 0f;
-        rearRightWheelCollider.brakeTorque = isBreaking ? brakePower : 0f;
+        float appliedBrakePower = isBreaking ? brakePower * GetBrake() : 0f;
+        float applySlowBrake = (verticalInput < .05) ? 200 : 0.25f;
+
+        frontRightWheelCollider.wheelDampingRate = applySlowBrake;
+        frontLeftWheelCollider.wheelDampingRate = applySlowBrake;
+        rearLeftWheelCollider.wheelDampingRate = applySlowBrake;
+        rearRightWheelCollider.wheelDampingRate = applySlowBrake;
+
+        frontRightWheelCollider.brakeTorque = appliedBrakePower;
+        frontLeftWheelCollider.brakeTorque = appliedBrakePower;
+        rearLeftWheelCollider.brakeTorque = appliedBrakePower;
+        rearRightWheelCollider.brakeTorque = appliedBrakePower;
     }
 
     private void HandleSteering() {
         currentSteerAngle = maxSteerAngle * horizontalInput;
+
+        SteeringWheel.transform.localRotation = Quaternion.Euler(new Vector3(-15.957f, -180,
+            (currentSteerAngle / maxSteerAngle * 360)));
+
         frontLeftWheelCollider.steerAngle = currentSteerAngle;
         frontRightWheelCollider.steerAngle = currentSteerAngle;
     }
@@ -181,6 +229,7 @@ public class CarController : MonoBehaviour {
             RPMBar.GetComponent<Image>().color = Color.red;
         } else RPMBar.GetComponent<Image>().color = Color.white;
 
+        SpeedIndicator.text = $"Speed: {MathF.Floor(VehicleRigidBody.velocity.magnitude * 3.6f)}";
         GearIndicator.text = $"Gear: {currentGear}";
     }
 
