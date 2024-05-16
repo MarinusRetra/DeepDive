@@ -24,4 +24,14 @@ public class ButtonFunctions : MonoBehaviour
     {
         Application.Quit();
     }
+    public void LevelSelect1()
+    {
+        EditorSceneManager.LoadScene(1);
+
+    }
+    public void LevelSelect2()
+    {
+
+        EditorSceneManager.LoadScene(1);
+    }
 }
