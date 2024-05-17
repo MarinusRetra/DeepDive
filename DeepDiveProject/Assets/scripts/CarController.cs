@@ -75,6 +75,7 @@ public class CarController : MonoBehaviour {
    [SerializeField] private TMP_Text GearIndicator;
 
     // Car State
+    [SerializeField] private int CameraIndex = 1;
 
     float Lerp(float a, float b, float t) {
         return a * (1 - t) + b * t;
@@ -88,6 +89,8 @@ public class CarController : MonoBehaviour {
     float GetClutch() => playerInput.actions["Clutch"].ReadValue<float>();
     float GetLookRight() => playerInput.actions["CameraRight"].ReadValue<float>();
     float GetLookLeft() => playerInput.actions["CameraLeft"].ReadValue<float>();
+    float CycleCameraA() => playerInput.actions["CameraCycleA"].ReadValue<float>();
+    float CycleCameraB() => playerInput.actions["CameraCycleB"].ReadValue<float>();
 
     private void Update() {
         UpdateUIElements();
@@ -110,6 +113,10 @@ public class CarController : MonoBehaviour {
         else 
             CineCamera.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset =
                 new Vector3(Lerp(CineCamera.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset.x, 0, .1f), 0, -0.24f);
+    }
+
+    private void CycleCameraOffset() {
+
     }
 
     private void GetInput() {

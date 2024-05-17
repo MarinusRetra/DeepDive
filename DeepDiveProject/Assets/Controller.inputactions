@@ -847,6 +847,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "CameraCycleA",
+                    "type": "Button",
+                    "id": "0e8b54e1-c12f-4b9f-ac73-2c6b481a7e9f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "CameraCycleB",
+                    "type": "Button",
+                    "id": "50cd550d-05d9-4bc3-bc16-0414990a723f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -935,6 +953,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "CameraRight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8b45aa6f-51ac-4e11-b86d-5228d0b841de",
+                    "path": "<Gamepad>/dpad/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CameraCycleA",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4351b0a9-052e-4b2a-bc78-bc413432df2d",
+                    "path": "<Gamepad>/dpad/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CameraCycleB",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
